@@ -1,0 +1,4 @@
+interface:
+  display_name: "Archaeologist"
+  short_description: "Use repository history to guide risky changes"
+  default_prompt: "Use $archaeologist to inspect relevant repository history before changing this code."
