@@ -1,11 +1,9 @@
 <h1 align="center">archaeologist</h1>
 
 <p align="center">
-  <strong>Your codebase has a past. Make your agent read it.</strong>
-</p>
-
-<p align="center">
-  A small coding-agent skill that checks repository history before changing code whose strange shape may be evidence.
+  <strong>A skill for reading Git history before changing old code.</strong>
+  <br />
+  Your codebase has a past. Make your agent read it.
 </p>
 
 <p align="center">
@@ -23,9 +21,9 @@
 
 ---
 
-Current code shows what survived. It rarely shows what failed first.
+Strange code often has a reason that the current files no longer show.
 
-A redundant-looking guard may be an incident fix. An awkward API may preserve an old client. A dependency may have been tried, reverted, and ruled out already. `archaeologist` makes the agent investigate only the history that could change the current decision.
+`archaeologist` checks relevant commits, blame, reverts, and tests before removing old logic or replacing an established pattern. It reports only history that changes the decision.
 
 ## Before / After
 
