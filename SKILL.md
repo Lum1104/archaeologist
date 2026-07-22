@@ -1,6 +1,6 @@
 ---
 name: archaeologist
-description: Inspect relevant repository history before changing old or unusual code, removing defensive logic, replacing dependencies, evolving public APIs, making architecture changes, or estimating substantial work. Use when prior fixes, reverts, compatibility constraints, analogous changes, or the origin of a code path could materially affect the decision.
+description: Use when changing old or unusual code, removing defensive logic, replacing dependencies, evolving APIs, or estimating substantial work where repository history may reveal material constraints.
 ---
 
 # Archaeologist
