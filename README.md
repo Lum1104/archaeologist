@@ -133,7 +133,6 @@ Each repository is independent; none of these are required dependencies.
 ## Repository contents
 
 - [`SKILL.md`](SKILL.md) — instructions loaded by the coding agent.
-- [`agents/openai.yaml`](agents/openai.yaml) — Codex-facing display metadata.
 - [`LICENSE`](LICENSE) — MIT license.
 
 ## License
