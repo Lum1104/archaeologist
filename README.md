@@ -1,9 +1,9 @@
 <h1 align="center">archaeologist</h1>
 
 <p align="center">
-  <strong>A skill for reading Git history before changing old code.</strong>
+  <strong>Your agents see old code.</strong>
   <br />
-  Your codebase has a past. Make your agent read it.
+  This skill makes them dig up why it exists.
 </p>
 
 <p align="center">
