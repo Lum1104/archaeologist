@@ -81,7 +81,7 @@ In Codex, use `$archaeologist`. In Claude Code, use `/archaeologist`. Invocation
 
 Use it for:
 
-- old, surprising, defensive, or apparently redundant code;
+- surprising, defensive, or apparently redundant code;
 - removals and dependency replacements;
 - public API and architecture changes;
 - substantial estimates with historical analogues;
@@ -122,7 +122,7 @@ If history is shallow, missing, or inconclusive, the agent says so. Current requ
 ## Related skills
 
 - [`prove-me-wrong`](https://github.com/Lum1104/prove-me-wrong) attacks the current explanation with a competing one.
-- [`bet-on-it`](https://github.com/Lum1104/bet-on-it) records a prediction before the next meaningful experiment or change.
+- [`bet-on-it`](https://github.com/Lum1104/bet-on-it) records a prediction before the next causally uncertain experiment or change.
 - [`no-vibes`](https://github.com/Lum1104/no-vibes) checks whether the final user-visible outcome was actually verified.
 - [`red-button`](https://github.com/Lum1104/red-button) adds focused safeguards when the resulting change is high risk.
 

@@ -1,81 +1,69 @@
 ---
 name: archaeologist
-description: Use when changing old or unusual code, removing defensive logic, replacing dependencies, evolving APIs, or estimating substantial work where repository history may reveal material constraints.
+description: Use when changing unusual or defensive code, mature APIs, dependencies, or architecture, or estimating a migration where Git history may reveal hidden constraints.
 ---
 
 # Archaeologist
 
 > Your codebase has a past. Read the part that matters.
 
-Use history to answer a current decision, not to produce a chronology. Treat history as evidence about constraints and prior attempts, not as authority that overrides current requirements.
+Use history to answer a current decision, not to produce a chronology. Treat it as evidence about constraints and prior attempts, never as authority over current requirements.
 
 ## Frame the investigation
 
-Before proposing the change:
+Before recommending a material change:
 
-1. State the decision history could change, such as whether to remove a guard, how wide an API migration is, or how large an estimate should be.
-2. Identify the smallest relevant surface: symbols, lines, files, tests, dependencies, and analogous implementations.
-3. Write one or two concrete history questions. Prefer “What failure caused this retry guard?” over “What is the history of this file?”
-4. Check that repository history is available. If it is shallow, missing, or inaccessible, report that limitation and continue from current evidence without inventing a past.
+1. State the decision history could change: remove a guard, preserve compatibility, widen a migration, or revise an estimate.
+2. Identify the smallest relevant surface: symbols, lines, files, tests, dependencies, and analogs.
+3. Ask one or two concrete questions. Prefer “What failure caused this retry guard?” over “What is the history of this file?”
+4. Check whether useful history exists. If it is shallow, missing, or inaccessible, report this and continue from current evidence without inventing a past.
 
-Do not invoke a broad history review for a trivial edit whose behavior and intent are directly established.
+Do not invoke a history review for a trivial edit whose behavior and intent are directly established.
 
 ## Follow the evidence trail
 
-Start narrowly and expand only when findings affect the decision.
+When history is available, run the narrowest query that can answer the question before making the recommendation.
 
-1. **Find the current and analogous code.** Search for the symbol, behavior, test name, error text, or old and new dependency names. Include similar implementations elsewhere in the repository.
-2. **Locate origin and changes.** Use path history, pickaxe searches, and line attribution as appropriate:
+1. **Find the live surface.** Search code and tests for the symbol, behavior, error text, dependency names, and analogs.
+2. **Locate origin and change points.** Choose the query that matches the question:
 
    ```sh
-   git log --oneline --decorate -- path/to/file
+   git log --oneline -- path/to/file
    git log -S'ExactToken' --oneline --all -- path/to/area
    git log -G'RelevantPattern' --oneline --all -- path/to/area
    git blame -L START,END -- path/to/file
    ```
 
-   Add `--follow` for a likely single-file rename. Use blame as a pointer to commits, not as proof of intent.
-3. **Read the decisive commits.** Inspect the patch, its parent when needed, commit message, nearby tests, and changed-file list. Check whether tests were added with the behavior and what invariant they encode.
+   Add `--follow` for a likely single-file rename. Use blame only as a pointer to a commit, never as proof of intent.
+3. **Read only decisive commits.** Inspect the patch, message, changed-file list, parent when needed, and tests introduced with the behavior:
 
    ```sh
    git show --stat COMMIT
    git show COMMIT -- path/to/code path/to/tests
-   git show COMMIT^:path/to/file
    ```
 
-4. **Look for failed or reversed approaches.** Search focused terms from the code, incident, issue, dependency, or API. Inspect reverts and the commits they revert. Do not infer failure merely because code later changed.
-5. **Calibrate analogous work.** For estimates or migrations, inspect several genuinely similar commits. Note code, tests, migrations, rollout, compatibility work, and follow-up fixes. Treat diff size and elapsed commit dates as weak proxies, not effort measurements.
-6. **Stop when history no longer changes the decision.** Avoid exhaustive logs, author profiles, and unrelated chronology.
+   Check what invariant a regression test encodes rather than merely noting that a test exists.
+4. **Check reversals and analogs when relevant.** Inspect reverts together with the commits they revert. For a migration or estimate, inspect several genuinely similar changes and note compatibility work, rollout, migrations, tests, and follow-up fixes.
 
-Stay read-only during the investigation. Do not rewrite history, restore files, or discard working-tree changes.
+Expand only while a decision-relevant question remains unresolved. Stop when another history query is unlikely to change the decision; avoid exhaustive logs, author profiles, and unrelated chronology.
 
-## Separate evidence from inference
+Stay read-only throughout the investigation. Do not rewrite history, restore files, or discard working-tree changes.
 
-Label conclusions mentally or explicitly as:
+## Calibrate the conclusion
 
-- **Evidence:** directly observed in a diff, test, revert relationship, release note, or linked issue available to inspect.
-- **Inference:** a plausible explanation derived from that evidence.
-- **Unknown:** a question the available history cannot answer.
+Prefer an invariant encoded by a regression test over an unsupported commit-message claim, and a commit message over guessing from a patch or blame. Verify that a historical constraint still applies to the current environment before preserving it.
 
-Prefer behavior encoded by a regression test over an unsupported commit-message claim. Prefer a commit message over guessing from blame. Verify that a historical constraint still applies to the current environment before preserving it.
+Do not infer that an approach failed merely because the code later changed. Do not treat a repeated pattern as a mandatory convention. Never claim that history proves author intent, production impact, or effort without direct support.
 
-Never claim that history proves author intent, production impact, or effort unless the repository contains direct support. Do not confuse repeated patterns with mandatory conventions.
-
-## Convert findings into a decision
-
-Report only evidence that materially affects the current work. Use this compact structure:
+If history materially affects the work, use this compact handoff:
 
 ```text
-History question: Why does the client suppress a second callback?
-Evidence: Commit abc123 added the guard and a regression test for duplicate
-callbacks from SDK v2; commit def456 later upgraded to v4 but retained the test.
-Inference: The original SDK defect may be obsolete, but duplicate-callback behavior
-remains an asserted compatibility invariant.
-Decision impact: Keep the invariant while replacing the SDK-specific guard; run the
-existing regression test and add a v4-path case.
-Unknown: No history establishes whether downstream callers still depend on it.
+Evidence: <directly observed commit, diff, test, revert, or issue>
+Inference: <explanation derived from that evidence>
+Decision impact: <how the current proposal changes>
+Unknown: <material question history cannot answer>
 ```
 
-Let history change the proposal when it reveals a live invariant, a previously failed approach, hidden rollout work, or a broader precedent. Say “No material historical evidence found” when that is the honest result; do not pad the report.
+Otherwise report only: “No material historical evidence found.” Do not pad the handoff.
 
-For estimates, present a range and name the historically observed scope drivers. Do not convert a prior commit’s line count into a precise schedule.
+For estimates, present a range and name historically observed scope drivers. Treat diff size and elapsed commit dates as weak proxies, never as a precise schedule or effort measurement.
